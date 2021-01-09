@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.health.dao.SetmealDao">
+
+    <insert id="add" parameterType="setmeal" keyProperty="id" useGeneratedKeys="true">
+        insert into t_setmeal (name,code,helpCode,sex,age,price,remark,attention,img)
+        values (#{name},#{code},#{helpCode},#{sex},#{age},#{price},#{remark},#{attention},#{img})
+    </insert>
+
+    <insert id="addSetmealCheckgroup">
+        insert into t_setmeal_checkgroup (setmeal_id,checkgroup_id)
+        values (#{setmealId},#{checkgroupId})
+    </insert>
+
+    <select id="findAllByCondition" resultType="setmeal">
+        select * from t_setmeal
+        <where>
+            <if test="queryString != null and queryString.length > 0">
+                code like #{queryString} or name like #{queryString} or helpCode like #{queryString}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById" resultType="setmeal">
+        select * from t_setmeal where id = #{id};
+    </select>
+
+    <select id="findCheckgroupIdsBySetmealId" resultType="integer">
+         select checkgroup_id from t_setmeal_checkgroup where setmeal_id = #{id}
+    </select>
+
+    <select id="findCountBySetmealId" resultType="integer">
+         select count(1) from t_setmeal_checkgroup where setmeal_id = #{id}
+    </select>
+
+    <delete id="deleteBySetmealId" parameterType="int">
+        delete from t_setmeal_checkgroup where setmeal_id = #{id}
+    </delete>
+    <delete id="deleteSetmeal" parameterType="int">
+        delete from t_setmeal where setmeal_id = #{id}
+    </delete>
+</mapper>
