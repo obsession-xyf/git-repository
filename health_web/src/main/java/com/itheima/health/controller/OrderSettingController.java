@@ -6,6 +6,7 @@ import com.itheima.health.entity.Result;
 import com.itheima.health.pojo.OrderSetting;
 import com.itheima.health.service.OrderSettingService;
 import com.itheima.health.utils.POIUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,8 +31,8 @@ public class OrderSettingController {
      *
      * @return
      */
-    @RequestMapping("xxx")
-    public Result xxx(MultipartFile excelFile) {
+    @PostMapping("upload")
+    public Result upload(MultipartFile excelFile) {
         try {
             // 读取excel文件
             List<String[]> strings = POIUtils.readExcel(excelFile);
@@ -53,7 +54,6 @@ public class OrderSettingController {
             return new Result(true, MessageConstant.IMPORT_ORDERSETTING_SUCCESS);
         } catch (Exception e) {
             return new Result(true, MessageConstant.IMPORT_ORDERSETTING_FAIL);
-
         }
 
     }

@@ -143,7 +143,7 @@
                 },
 				//上传之前进行文件格式校验
                 beforeUpload(file){
-                    const isXLS = file.type === 'application/vnd.ms-excel';
+                    /*const isXLS = file.type === 'application/vnd.ms-excel';
                     if(isXLS){
                         return true;
                     }
@@ -152,7 +152,8 @@
                         return true;
                     }
                     this.$message.error('上传文件只能是xls或者xlsx格式!');
-                    return false;
+                    return false;*/
+                    return true;
                 },
 				//下载模板文件
                 downloadTemplate(){

@@ -8,7 +8,8 @@ public interface OrderSettingService {
 
     /**
      * 将excel中的数据上传到数据库
+     *
      * @param orderSettingList
      */
-    void add(List<OrderSetting> orderSettingList);
+    void add(List<OrderSetting> orderSettingList) throws Exception;
 }
