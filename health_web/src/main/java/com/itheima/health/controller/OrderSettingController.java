@@ -64,6 +64,7 @@ public class OrderSettingController {
      */
     @GetMapping("/getOrderSettingByMonth")
     public Result getOrderSettingByMonth(String month){
+
         // 调用服务端查询
         List<Map<String,Integer>> data = orderSettingService.getOrderSettingByMonth(month);
         return new Result(true, MessageConstant.GET_ORDERSETTING_SUCCESS,data);
