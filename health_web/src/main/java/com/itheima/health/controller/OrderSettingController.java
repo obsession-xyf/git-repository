@@ -6,6 +6,7 @@ import com.itheima.health.entity.Result;
 import com.itheima.health.pojo.OrderSetting;
 import com.itheima.health.service.OrderSettingService;
 import com.itheima.health.utils.POIUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,13 +16,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: xieyufeng
  * @Date: 2021/1/9 4:44 下午
  */
 @RestController
-@RequestMapping("ordersetting")
+@RequestMapping("/ordersetting")
 public class OrderSettingController {
     @Reference
     private OrderSettingService orderSettingService;
@@ -31,7 +33,7 @@ public class OrderSettingController {
      *
      * @return
      */
-    @PostMapping("upload")
+    @PostMapping("/upload")
     public Result upload(MultipartFile excelFile) {
         try {
             // 读取excel文件
@@ -55,6 +57,17 @@ public class OrderSettingController {
         } catch (Exception e) {
             return new Result(true, MessageConstant.IMPORT_ORDERSETTING_FAIL);
         }
-
     }
+
+    /**
+     * 通过月份查询预约设置信息
+     */
+    @GetMapping("/getOrderSettingByMonth")
+    public Result getOrderSettingByMonth(String month){
+        // 调用服务端查询
+        List<Map<String,Integer>> data = orderSettingService.getOrderSettingByMonth(month);
+        return new Result(true, MessageConstant.GET_ORDERSETTING_SUCCESS,data);
+    }
+
+
 }

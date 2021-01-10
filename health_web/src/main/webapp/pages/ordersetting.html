@@ -136,14 +136,63 @@
             },
             created: function () {//在vue初始化时调用
                 this.initData(null);
+                // 查询预约设置表当月的数据
+                this.getDataByMonth();
             },
             methods: {
+                getDataByMonth(){
+                    // 获取当前的年-月 2021-01
+                    var month = this.currentYear + "-";
+                    month+= this.currentMonth<10?'0':'';
+                    month+= this.currentMonth
+                    //alert(month);
+                    // 发送请求去查询这个月的预约设置信息
+                    axios.get('/ordersetting/getOrderSettingByMonth.do?month=' + month).then(res => {
+                        // 成功的话绑定数据到leftobj里
+                        if(res.data.flag){
+                            this.leftobj = res.data.data;
+                        }else{
+                            this.$message.error(res.data.message);
+                        }
+                    });
+
+                },
 				//预约设置
                 handleOrderSet(day){
+                    var orderDate = this.formatDate(day.getFullYear(), day.getMonth() + 1, day.getDate());
+                    //alert(dateStr);
+                    this.$prompt('请输入' + orderDate + '最大预约数', '预约设置', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        inputPattern: /^[1-9]\d*$/,
+                        inputErrorMessage: '请输入正整数'
+                    }).then(({ value }) => {
+                        // 请求通过日期更新可预约最大数量
+                        // 日期，数量
+                        // url.do?orderDate=&number=
+                        // 提交json, 后台实体类OrderSetting来收，json的key与pojo的属性名必须一致
+                        var number = value;
+                        var submitData = {orderDate,number};//{orderDate:orderDate, number: number};
+                        axios.post('/ordersetting/editNumberByDate.do',submitData).then(res => {
+                            this.$message({
+                                message: res.data.message,
+                                type: res.data.flag?"success":"error"
+                            })
+                            if(res.data.flag){
+                                this.getDataByMonth();
+                            }
+                        })
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '取消输入'
+                        });
+                    });
                 },
 				//上传之前进行文件格式校验
                 beforeUpload(file){
-                    /*const isXLS = file.type === 'application/vnd.ms-excel';
+                    // 【注意】file.type=空值的人，return true;
+                    const isXLS = file.type === 'application/vnd.ms-excel';
                     if(isXLS){
                         return true;
                     }
@@ -152,8 +201,7 @@
                         return true;
                     }
                     this.$message.error('上传文件只能是xls或者xlsx格式!');
-                    return false;*/
-                    return true;
+                    return false;
                 },
 				//下载模板文件
                 downloadTemplate(){
@@ -161,27 +209,23 @@
                 },
 				//上传成功提示
                 handleSuccess(response, file) {
-                    if(response.flag){
-                        this.$message({
-                            message: response.message,
-                            type: 'success'
-                        });
-                    }else{
-                        this.$message.error(response.message);
-                    }
-                    console.log(response, file, fileList);
+                    this.$message({
+                        message: response.message,
+                        type: response.flag?"success":"error"
+                    });
+                    // 刷新日历
                 },
                 //初始化当前页要展示的日期
 				initData: function (cur) {
                     var date;
                     var index = 0;   //控制显示预定的天数
-                    if (cur) {
+                    if (cur) { // 如果cur有值，cur不为null, cur不为undefined,cur不为false,cur不为0
                         date = new Date(cur);
                     } else {
                         var now = new Date();
-                        var d = new Date(this.formatDate(now.getFullYear(), now.getMonth(), 1));
+                        var d = new Date(this.formatDate(now.getFullYear(), now.getMonth()+1, 1));
                         d.setDate(35);
-                        date = new Date(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                        date = new Date(this.formatDate(d.getFullYear(), d.getMonth(), 1));
                     }
                     this.currentDay = date.getDate();
                     this.currentYear = date.getFullYear();
@@ -229,12 +273,13 @@
                             dayobject.index = index++;
                         this.days.push(dayobject);
                     }
-                    
-                    /*this.leftobj = [
+                    /*
+                    this.leftobj = [
                         { date: 1, number: 120, reservations: 1 },
                         { date: 3, number: 120, reservations: 1 },
                         { date: 4, number: 120, reservations: 120 },
                         { date: 6, number: 120, reservations: 1 },
+                        { date: 15, number: 220, reservations: 200 },
                         { date: 8, number: 120, reservations: 1 }
                     ];*/
                 },
@@ -242,6 +287,7 @@
                 goCurrentMonth: function (year, month) {
                     var d = new Date();
                     this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                    this.getDataByMonth();
                 },
 				//向前一个月
                 pickPre: function (year, month) {
@@ -251,12 +297,14 @@
                     var d = new Date(this.formatDate(year, month, 1));
                     d.setDate(0);
                     this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                    this.getDataByMonth();
                 },
 				//向后一个月
                 pickNext: function (year, month) {
                     var d = new Date(this.formatDate(year, month, 1));
                     d.setDate(35);////获取指定天之后的日期
                     this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                    this.getDataByMonth();
                 },
                 // 返回 类似 2016-01-02 格式的字符串
                 formatDate: function (year, month, day) {

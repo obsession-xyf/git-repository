@@ -48,6 +48,7 @@ public interface SetmealDao {
 
     /**
      * 是否有订单使用了此套餐
+     *
      * @param id
      * @return
      */
@@ -55,13 +56,30 @@ public interface SetmealDao {
 
     /**
      * 删除套餐与检查组的关系
+     *
      * @param id
      */
     void deleteBySetmealId(@Param("id") int id);
 
     /**
      * 删除套餐
+     *
      * @param id
      */
     void deleteSetmeal(@Param("id") int id);
+
+    /**
+     * 查询所有套餐
+     *
+     * @return
+     */
+    List<Setmeal> findAll();
+
+    /**
+     * 查询详情页
+     *
+     * @param id
+     * @return
+     */
+    Setmeal findDetailById(@Param("id") int id);
 }

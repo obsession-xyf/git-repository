@@ -22,6 +22,11 @@ public class SetmealServiceImpl implements SetmealService {
     @Autowired
     private SetmealDao setmealDao;
 
+    /**
+     * 添加套餐
+     * @param setmeal
+     * @param checkgroupIds
+     */
     @Override
     public void add(Setmeal setmeal, Integer[] checkgroupIds) {
         // 添加套餐
@@ -64,6 +69,7 @@ public class SetmealServiceImpl implements SetmealService {
 
     /**
      * 根据套餐id查询此套餐下包含的检查组的id
+     *
      * @param id
      * @return
      */
@@ -74,10 +80,11 @@ public class SetmealServiceImpl implements SetmealService {
 
     /**
      * 根据id删除套餐
+     *
      * @param id
      */
     @Override
-    public void delete(int id) throws Exception{
+    public void delete(int id) throws Exception {
         // 是否有订单使用了此套餐
         int count = setmealDao.findCountBySetmealId(id);
         // 有 抛异常
@@ -89,5 +96,26 @@ public class SetmealServiceImpl implements SetmealService {
             //删除套餐
             setmealDao.deleteSetmeal(id);
         }
+    }
+
+    /**
+     * 查询所有套餐
+     *
+     * @return
+     */
+    @Override
+    public List<Setmeal> findAll() {
+        return setmealDao.findAll();
+    }
+
+    /**
+     * 查询详情页
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Setmeal findDetailById(int id) {
+        return setmealDao.findDetailById(id);
     }
 }

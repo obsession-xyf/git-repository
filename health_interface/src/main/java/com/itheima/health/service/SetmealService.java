@@ -9,6 +9,7 @@ import java.util.List;
 public interface SetmealService {
     /**
      * 添加套餐
+     *
      * @param setmeal
      * @param checkgroupIds
      */
@@ -16,6 +17,7 @@ public interface SetmealService {
 
     /**
      * 查询分页-套餐列表
+     *
      * @param queryPageBean
      * @return
      */
@@ -23,6 +25,7 @@ public interface SetmealService {
 
     /**
      * 根据id查询套餐
+     *
      * @param id
      * @return
      */
@@ -30,6 +33,7 @@ public interface SetmealService {
 
     /**
      * 根据套餐id查询此套餐下包含的检查组的id
+     *
      * @param id
      * @return
      */
@@ -37,7 +41,23 @@ public interface SetmealService {
 
     /**
      * 根据id删除套餐
+     *
      * @param id
      */
     void delete(int id) throws Exception;
+
+    /**
+     * 查询所有套餐
+     *
+     * @return
+     */
+    List<Setmeal> findAll();
+
+    /**
+     * 查询详情页
+     *
+     * @param id
+     * @return
+     */
+    Setmeal findDetailById(int id);
 }

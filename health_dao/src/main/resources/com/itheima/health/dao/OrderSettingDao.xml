@@ -15,4 +15,9 @@
     <insert id="add" parameterType="orderSetting">
         insert into t_ordersetting (orderDate,number) values (#{orderDate},#{number,jdbcType=DATE})
     </insert>
+
+    <!--根据月份查询预约设置信息-->
+    <select id="getOrderSettingByMonth" parameterType="map" resultType="OrderSetting">
+        select * from t_ordersetting where orderDate between #{dateBegin} and #{dateEnd}
+    </select>
 </mapper>
