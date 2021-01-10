@@ -35,7 +35,7 @@ public class OrderSettingServiceImpl implements OrderSettingService {
             OrderSetting os = orderSettingDao.findByOrderDate(orderSetting.getOrderDate());
             if (os != null) {
                 // 存在 判断预约人数是否  最大预约数
-                int number = os.getNumber();//可预约人数
+                int number = orderSetting.getNumber();//可预约人数
                 int reservations = os.getReservations();//已预约人数
                 if (number < reservations) {
                     throw new RuntimeException("可预约人数不能小于已预约人数");
@@ -76,5 +76,29 @@ public class OrderSettingServiceImpl implements OrderSettingService {
             data.add(orderSettingMap);
         }
         return data;
+    }
+
+    /**
+     * 通过日期修改最大预约数
+     * @param orderSetting
+     */
+    @Override
+    public void editNumberByDate(OrderSetting orderSetting) {
+        // 查询是否已经存在
+        OrderSetting os = orderSettingDao.findByOrderDate(orderSetting.getOrderDate());
+        if (os != null) {
+            // 存在 判断预约人数是否  最大预约数
+            int number = orderSetting.getNumber();//可预约人数
+            int reservations = os.getReservations();//已预约人数
+            if (number < reservations) {
+                throw new RuntimeException("可预约人数不能小于已预约人数");
+            } else {
+                // 修改
+                orderSettingDao.update(orderSetting);
+            }
+        } else {
+            // 不存在，直接添加
+            orderSettingDao.add(orderSetting);
+        }
     }
 }

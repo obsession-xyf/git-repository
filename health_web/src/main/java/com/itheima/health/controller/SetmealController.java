@@ -5,6 +5,7 @@ import com.itheima.health.constant.MessageConstant;
 import com.itheima.health.entity.PageResult;
 import com.itheima.health.entity.QueryPageBean;
 import com.itheima.health.entity.Result;
+import com.itheima.health.pojo.CheckGroup;
 import com.itheima.health.pojo.Setmeal;
 import com.itheima.health.service.SetmealService;
 import com.itheima.health.utils.QiNiuUtils;
@@ -49,7 +50,12 @@ public class SetmealController {
     @GetMapping("findById")
     public Result findById(int id) {
         Setmeal setmeal = setmealService.findById(id);
-        return new Result(true, MessageConstant.QUERY_SETMEAL_SUCCESS, setmeal);
+        // 前端要显示图片需要全路径
+        // 封装到map中，解决图片路径问题
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        resultMap.put("setmeal", setmeal); // formData
+        resultMap.put("domain", QiNiuUtils.DOMAIN); // domain
+        return new Result(true, MessageConstant.QUERY_SETMEAL_SUCCESS, resultMap);
     }
 
     /**
@@ -114,13 +120,25 @@ public class SetmealController {
             Map<String, String> map = new HashMap<String, String>(2);
             map.put("imgName", uniqueFilename);
             map.put("domain", QiNiuUtils.DOMAIN);
-
             return new Result(true, MessageConstant.PIC_UPLOAD_SUCCESS, map);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return new Result(false, MessageConstant.PIC_UPLOAD_FAIL);
     }
+
+    /**
+     * 修改套餐信息
+     * @param setmeal
+     * @param checkgroupIds
+     * @return
+     */
+    @PostMapping("/update")
+    public Result update(@RequestBody Setmeal setmeal, Integer[] checkgroupIds) {
+        // 调用业务层
+        setmealService.update(setmeal, checkgroupIds);
+        // 返回结果
+        return new Result(true, "编辑套餐成功");
+    }
+
 }

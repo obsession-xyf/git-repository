@@ -24,6 +24,7 @@ public class SetmealServiceImpl implements SetmealService {
 
     /**
      * 添加套餐
+     *
      * @param setmeal
      * @param checkgroupIds
      */
@@ -117,5 +118,23 @@ public class SetmealServiceImpl implements SetmealService {
     @Override
     public Setmeal findDetailById(int id) {
         return setmealDao.findDetailById(id);
+    }
+
+    /**
+     * 修改套餐信息
+     *
+     * @param setmeal
+     * @param checkgroupIds
+     */
+    @Override
+    public void update(Setmeal setmeal, Integer[] checkgroupIds) {
+        // 修改套餐信息
+        setmealDao.update(setmeal);
+        // 删除旧关系
+        setmealDao.deleteSetmealCheckgroup(setmeal.getId());
+        // 遍历添加新关系
+        for (Integer checkgroupId : checkgroupIds) {
+            setmealDao.addSetmealCheckgroup(setmeal.getId(), checkgroupId);
+        }
     }
 }

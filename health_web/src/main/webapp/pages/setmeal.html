@@ -174,7 +174,7 @@
                                                         :show-file-list="false"
                                                         :on-success="handleAvatarSuccess"
                                                         :before-upload="beforeAvatarUpload">
-                                                    <img v-if="imageUrl" :src="imageUrl" v-moder="formData.img"
+                                                    <img v-if="imageUrl" :src="imageUrl" v-model="formData.img"
                                                          class="avatar">
                                                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                                                 </el-upload>
@@ -288,7 +288,7 @@
                                                         :show-file-list="false"
                                                         :on-success="handleAvatarSuccess"
                                                         :before-upload="beforeAvatarUpload">
-                                                    <img v-if="imageUrl" :src="imageUrl" v-moder="formData.img"
+                                                    <img v-if="imageUrl" :src="imageUrl" v-model="formData.img"
                                                          class="avatar">
                                                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                                                 </el-upload>
@@ -361,7 +361,6 @@
                 total: 100,
                 queryString: null,
             },
-
             dataList: [],//列表数据
             formData: {},//表单数据
             tableData: [],//添加表单窗口中检查组列表数据
@@ -381,6 +380,7 @@
                     type: response.flag ? "success" : "error"
                 })
                 if (response.flag) {
+                    this.domain = response.data.domain;
                     // 回显图片
                     this.imageUrl = response.data.domain + response.data.imgName;
                     // 表单中没有img参数，后台数据库用的就是img字段，补上它的值
@@ -467,7 +467,9 @@
                 axios.get("/setmeal/findById.do?id="+row.id).then(res => {
                     if (res.data.flag) {
                         // 回显套餐
-                        this.formData = res.data.data;
+                        this.formData = res.data.data.setmeal;
+                        // 回显图片
+                        this.imageUrl = res.data.data.domain + this.formData.img;
                         // 查询所有检查组信息
                         axios.get("/checkgroup/findAll.do").then(resp => {
                             if (resp.data.flag) {
@@ -478,7 +480,7 @@
                                 axios.get("/setmeal/findCheckgroupIdsBySetmealId.do?id="+row.id).then(response => {
                                     if (response.data.flag) {
                                         // 成功  勾选关联的检查组
-                                        this.checkitemIds = response.data.data;
+                                        this.checkgroupIds = response.data.data;
                                     } else {
                                         // 失败
                                         this.$message({type:"error", message:response.data.message})
@@ -525,7 +527,7 @@
             //编辑
             handleEdit() {
                 // 发送修改请求
-                axios.post("/checkgroup/update.do?checkitemIds=" + this.checkitemIds, this.formData)
+                axios.post("/setmeal/update.do?checkgroupIds=" + this.checkgroupIds, this.formData)
                     .then(res => {
                         if (res.data.flag) {
                             // 编辑成功

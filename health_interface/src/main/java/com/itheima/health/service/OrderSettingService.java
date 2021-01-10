@@ -20,4 +20,10 @@ public interface OrderSettingService {
      * @return
      */
     List<Map<String, Integer>> getOrderSettingByMonth(String month);
+
+    /**
+     * 通过日期修改最大预约数
+     * @param orderSetting
+     */
+    void editNumberByDate(OrderSetting orderSetting);
 }

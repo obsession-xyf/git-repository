@@ -60,4 +60,11 @@ public interface SetmealService {
      * @return
      */
     Setmeal findDetailById(int id);
+
+    /**
+     * 修改套餐信息
+     * @param setmeal
+     * @param checkgroupIds
+     */
+    void update(Setmeal setmeal, Integer[] checkgroupIds);
 }

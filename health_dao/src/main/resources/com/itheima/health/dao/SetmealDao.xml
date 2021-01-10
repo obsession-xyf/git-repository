@@ -14,6 +14,21 @@
         values (#{setmealId},#{checkgroupId})
     </insert>
 
+    <update id="update" parameterType="setmeal">
+        update t_setmeal
+        set
+        name=#{name},
+        code=#{code},
+        helpCode=#{helpCode},
+        sex=#{sex},
+        age=#{age},
+        price=#{price},
+        remark=#{remark},
+        attention=#{attention},
+        img=#{img}
+        where id = #{id}
+    </update>
+
     <select id="findAllByCondition" resultType="setmeal">
         select * from t_setmeal
         <where>
@@ -32,7 +47,7 @@
     </select>
 
     <select id="findCountBySetmealId" resultType="integer">
-         select count(1) from t_setmeal_checkgroup where setmeal_id = #{id}
+         select count(1) from t_order where setmeal_id = #{id}
     </select>
 
     <select id="findAll" resultType="setmeal">
@@ -44,7 +59,11 @@
     </delete>
 
     <delete id="deleteSetmeal" parameterType="int">
-        delete from t_setmeal where setmeal_id = #{id}
+        delete from t_setmeal where id = #{id}
+    </delete>
+
+    <delete id="deleteSetmealCheckgroup" parameterType="int">
+        delete from t_setmeal_checkgroup where setmeal_id = #{id}
     </delete>
 
     <!-- 【注意】这里用的是resultMap，不要写错了resultType -->

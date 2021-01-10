@@ -82,4 +82,16 @@ public interface SetmealDao {
      * @return
      */
     Setmeal findDetailById(@Param("id") int id);
+
+    /**
+     * 修改套餐信息
+     * @param setmeal
+     */
+    void update(Setmeal setmeal);
+
+    /**
+     * 根据套餐id删除旧关系
+     * @param id
+     */
+    void deleteSetmealCheckgroup(@Param("id") Integer id);
 }
