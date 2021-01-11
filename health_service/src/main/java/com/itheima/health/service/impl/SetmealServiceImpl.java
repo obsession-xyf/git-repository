@@ -137,4 +137,13 @@ public class SetmealServiceImpl implements SetmealService {
             setmealDao.addSetmealCheckgroup(setmeal.getId(), checkgroupId);
         }
     }
+
+    /**
+     * 查询套餐图片信息集合
+     * @return
+     */
+    @Override
+    public List<String> findImgs() {
+        return setmealDao.findImgs();
+    }
 }

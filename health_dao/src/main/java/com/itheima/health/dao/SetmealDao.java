@@ -94,4 +94,10 @@ public interface SetmealDao {
      * @param id
      */
     void deleteSetmealCheckgroup(@Param("id") Integer id);
+
+    /**
+     * 查询套餐图片信息集合
+     * @return
+     */
+    List<String> findImgs();
 }

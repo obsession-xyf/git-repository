@@ -66,12 +66,16 @@
         delete from t_setmeal_checkgroup where setmeal_id = #{id}
     </delete>
 
+    <select id="findImgs" resultType="string">
+        select img from t_setmeal
+    </select>
+
     <!-- 【注意】这里用的是resultMap，不要写错了resultType -->
     <select id="findDetailById" parameterType="int" resultMap="setmealDetailResultMap">
         select s.id,s.name,s.age,s.sex,s.remark,s.img,
             sc.checkgroup_id,g.name checkgroup_name,g.remark checkgroup_remark,
             cc.checkitem_id,ci.name checkitem_name
-        From t_setmeal s
+        from t_setmeal s
         left join t_setmeal_checkgroup sc on s.id=sc.setmeal_id
         left join t_checkgroup g on sc.checkgroup_id=g.id
         left join t_checkgroup_checkitem cc on g.id=cc.checkgroup_id

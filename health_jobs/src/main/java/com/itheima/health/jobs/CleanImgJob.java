@@ -35,12 +35,12 @@ public class CleanImgJob {
         log.info("开始执行清理垃圾图片。。。");
         // 调用QiNiuUtils.查询所有图片
         List<String> imgIn7Niu = QiNiuUtils.listFile();
-        log.debug("7牛上一共有{}张图片", imgIn7Niu.size());
+        log.debug("七牛上一共有{}张图片", imgIn7Niu.size());
         // 调用setmealService查询数据库的所有图片
-        //List<String> imgInDb = setmealService.findImgs();
-        //log.debug("数据库一共有{}张图片", imgInDb.size());
+        List<String> imgInDb = setmealService.findImgs();
+        log.debug("数据库一共有{}张图片", imgInDb.size());
         // imgIn7Niu-imgInDb
-        //imgIn7Niu.removeAll(imgInDb);
+        imgIn7Niu.removeAll(imgInDb);
         if (imgIn7Niu.size() > 0) {
             log.info("要清理的图片有{}张", imgIn7Niu.size());
             // 调用7牛工具删除垃圾图片

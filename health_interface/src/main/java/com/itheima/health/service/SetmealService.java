@@ -67,4 +67,10 @@ public interface SetmealService {
      * @param checkgroupIds
      */
     void update(Setmeal setmeal, Integer[] checkgroupIds);
+
+    /**
+     * 查询套餐图片信息集合
+     * @return
+     */
+    List<String> findImgs();
 }
